@@ -12,18 +12,16 @@ app = Flask(__name__)
 devices = []
 
 
-@app.route("/check_device/")
-def check_device():
-    device_id = int(request.get_json())
+@app.route("/devices/<int:device_id>")
+def check_device(device_id):
     for device in devices:
         if device.device_id == device_id:
             return json.dumps(True), 200
     return json.dumps(False), 200
 
 
-@app.route("/delete_device/", methods=["DELETE"])
-def delete_device():
-    device_id = int(request.get_json())
+@app.route("/devices/<int:device_id>", methods=["DELETE"])
+def delete_device(device_id):
     for device in devices:
         if device.device_id == device_id:
             devices.remove(device)
@@ -32,9 +30,8 @@ def delete_device():
         return "", 204
 
 
-@app.route("/create_device/", methods=["PUT", "POST"])
-def create_device():
-    device_id = int(request.get_json())
+@app.route("/devices/<int:device_id>", methods=["PUT"])
+def create_device(device_id):
     for device in devices:
         if device.device_id == device_id:
             return "", 204
@@ -42,20 +39,18 @@ def create_device():
     return f"Device {device_id} created successfully", 200
 
 
-@app.route("/update_device/", methods=["PUT", "POST"])
-def update_device():
+@app.route("/devices/<int:device_id>", methods=["POST"])
+def update_device(device_id):
     device_in = json.loads(request.get_json())
     for device in devices:
-        if device.device_id == int(device_in["device_id"]):
+        if device.device_id == device_id:
             # Cast received values to field types before assignment
             for attr in list(device_in.keys()):
-                if attr == "device_id":
-                    continue
                 if hasattr(device, attr):
                     attr_type = eval(f"type(Device.{attr})")
                     attr_val = attr_type(device_in[attr])
                     setattr(device, attr, attr_val)
-            return f"Device {device_in['device_id']} updated successfully", 200
+            return f"Device {device_id} updated successfully", 200
     return "Device not found", 404
 
 
