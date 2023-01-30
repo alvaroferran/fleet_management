@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./app/Dockerfile
+    network_mode: "host"
+    ports:
+      - 5002:5001
+
+  test_client:
+    build:
+      context: .
+      dockerfile: ./test_client/Dockerfile
+    network_mode: "host"
+    ports:
+      - 5003:5001
+    # depends_on:
+    #   - server

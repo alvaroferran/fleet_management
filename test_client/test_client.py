@@ -7,7 +7,7 @@ import requests
 
 
 def main():
-    ip = "http://localhost:5000"
+    ip = "http://localhost:5001"
     device_ids = [112, 358, 132, 134]
 
     # Check if random device exists in fleet
@@ -26,6 +26,7 @@ def main():
         ret = requests.put(f"{ip}/devices/{device_id}")
         print(ret.text)
         if ret.ok:
+            # Update device
             device = {
                 "alias": f"Test device {device_id}",
                 "payment_required": False,

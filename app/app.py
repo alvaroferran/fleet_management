@@ -3,8 +3,9 @@
 import json
 
 from flask import Flask, request
+from flask_pymongo import PyMongo
 
-from device import Device
+from common.device import Device
 
 
 app = Flask(__name__)
@@ -36,10 +37,10 @@ def create_device(device_id):
         if device.device_id == device_id:
             return "", 204
     devices.append(Device(device_id=device_id))
-    return f"Device {device_id} created successfully", 200
+    return f"Device {device_id} created successfully", 201
 
 
-@app.route("/devices/<int:device_id>", methods=["POST"])
+@app.route("/devices/<int:device_id>", methods=["POST", "PATCH"])
 def update_device(device_id):
     device_in = json.loads(request.get_json())
     for device in devices:
@@ -55,4 +56,4 @@ def update_device(device_id):
 
 
 if __name__ == "__main__":
-    app.run(host="localhost")
+    app.run(host="0.0.0.0", port="5001")  # 0.0.0.0 to bind to any incoming ip
