@@ -5,6 +5,8 @@ import random
 
 import requests
 
+from common.device import Device
+
 
 def main():
     ip = "http://localhost:5001"
@@ -12,27 +14,23 @@ def main():
 
     # Check if random device exists in fleet
     device_id = random.choice(device_ids)
-    print(f"Checking if device {device_id} exists.")
-    device_exists = requests.get(f"{ip}/devices/{device_id}").json()
-
-    if device_exists:
+    ret = requests.get(f"{ip}/devices/{device_id}")
+    print(ret.text)
+    if ret.ok:
         # If device exists, delete it from database
-        print(f"Device {device_id} exists, requesting deletion.")
         ret = requests.delete(f"{ip}/devices/{device_id}")
         print(ret.text)
     else:
         # Create device
-        print(f"Device {device_id} doesn't exist, creating.")
-        ret = requests.put(f"{ip}/devices/{device_id}")
+        ret = requests.post(f"{ip}/devices/{device_id}")
         print(ret.text)
         if ret.ok:
             # Update device
-            device = {
-                "alias": f"Test device {device_id}",
-                "payment_required": False,
-            }
-            device = json.dumps(device)
-            ret = requests.post(f"{ip}/devices/{device_id}", json=device)
+            device = Device(device_id=device_id)
+            device.alias = f"Test device {device_id}"
+            device.payment_required = False
+            device = json.dumps(device.__dict__)
+            ret = requests.put(f"{ip}/devices/{device_id}", json=device)
             print(ret.text)
 
 

@@ -17,8 +17,8 @@ devices = []
 def check_device(device_id):
     for device in devices:
         if device.device_id == device_id:
-            return json.dumps(True), 200
-    return json.dumps(False), 200
+            return f"Device {device_id} found", 200
+    return f"Device {device_id} not found", 404
 
 
 @app.route("/devices/<int:device_id>", methods=["DELETE"])
@@ -31,7 +31,7 @@ def delete_device(device_id):
         return "", 204
 
 
-@app.route("/devices/<int:device_id>", methods=["PUT"])
+@app.route("/devices/<int:device_id>", methods=["POST"])
 def create_device(device_id):
     for device in devices:
         if device.device_id == device_id:
@@ -40,7 +40,7 @@ def create_device(device_id):
     return f"Device {device_id} created successfully", 201
 
 
-@app.route("/devices/<int:device_id>", methods=["POST", "PATCH"])
+@app.route("/devices/<int:device_id>", methods=["PUT"])
 def update_device(device_id):
     device_in = json.loads(request.get_json())
     for device in devices:
@@ -52,7 +52,7 @@ def update_device(device_id):
                     attr_val = attr_type(device_in[attr])
                     setattr(device, attr, attr_val)
             return f"Device {device_id} updated successfully", 200
-    return "Device not found", 404
+    return f"Device {device_id} not found", 404
 
 
 if __name__ == "__main__":
