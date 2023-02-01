@@ -25,8 +25,9 @@ db = mongo.db.coll
 
 @app.route("/devices/<int:device_id>")
 def check_device(device_id):
-    if db.find_one({"_id": device_id}):
-        return f"Device {device_id} found", 200
+    device = db.find_one({"_id": device_id})
+    if device:
+        return f"Device {device_id} found: {json.dumps(device)}", 200
     return f"Device {device_id} not found", 404
 
 
