@@ -5,9 +5,41 @@ services:
     build:
       context: .
       dockerfile: ./app/Dockerfile
+    restart: unless-stopped
+    secrets:
+      - mongo_password
+    environment:
+      MONGO_USERNAME: flask_user
+      MONGO_PASSWORD_FILE: /run/secrets/mongo_password
+      MONGO_HOSTNAME: localhost
+      MONGO_DATABASE: fleet_manager_db
     network_mode: "host"
     ports:
       - 5002:5001
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:4.4.19-rc0
+    restart: unless-stopped
+    command: mongod --auth
+    secrets:
+      - mongo_password
+      - mongo_root_password
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongodb_admin
+      MONGO_INITDB_ROOT_PASSWORD_FILE: /run/secrets/mongo_root_password
+      MONGO_INITDB_USERNAME: flask_user
+      MONGO_INITDB_PASSWORD_FILE: /run/secrets/mongo_password
+      MONGO_INITDB_DATABASE: fleet_manager_db
+      MONGODB_DATA_DIR: /data/db
+      MONDODB_LOG_DIR: /dev/null
+    network_mode: "host"
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo/database:/data/db
+      - ./mongo/mongo-init.sh:/docker-entrypoint-initdb.d/mongo-init.sh
 
   test_client:
     build:
@@ -18,3 +50,9 @@ services:
       - 5003:5001
     # depends_on:
     #   - server
+
+secrets:
+  mongo_password:
+    file: ./mongo/secrets/mongo_password.txt
+  mongo_root_password:
+    file: ./mongo/secrets/mongo_root_password.txt

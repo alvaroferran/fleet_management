@@ -26,7 +26,7 @@ def main():
         print(ret.text)
         if ret.ok:
             # Update device
-            device = Device(device_id=device_id)
+            device = Device(_id=device_id)
             device.alias = f"Test device {device_id}"
             device.payment_required = False
             device = json.dumps(device.__dict__)
