@@ -23,8 +23,16 @@ mongo = PyMongo(app)
 db = mongo.db.coll
 
 
+@app.route("/devices/")
+def list_devices():
+    devices = list(db.find({}))
+    if devices:
+        return f"Devices found ({len(devices)}): {json.dumps(devices)}", 200
+    return "No devices found", 404
+
+
 @app.route("/devices/<int:device_id>")
-def check_device(device_id):
+def get_device(device_id):
     device = db.find_one({"_id": device_id})
     if device:
         return f"Device {device_id} found: {json.dumps(device)}", 200
@@ -67,5 +75,4 @@ def update_device(device_id):
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5001")  # 0.0.0.0 to bind to any ip
-    # serve(app, host="0.0.0.0", port="5001")  # 0.0.0.0 to bind to any ip
+    serve(app, host="0.0.0.0", port="5001")  # 0.0.0.0 to bind to any ip

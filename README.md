@@ -17,7 +17,7 @@ To build the images run
 
 Execute the fleet management system:
 
-    docker compose run --rm server
+    docker compose run -d server
 
 and then the test client:
 
