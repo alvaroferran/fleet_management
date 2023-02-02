@@ -24,7 +24,7 @@ Flask app with a REST API to manage a fleet of distributed devices.
     - **Pass:**
         - Returns: "Device {device_id} created successfully"
         - Status: 201
-    - **Pass:**
+    - **Pass (device already exists):**
         - Returns: ""
         - Status: 204
 
@@ -40,7 +40,7 @@ Flask app with a REST API to manage a fleet of distributed devices.
     - **Pass:**
         - Returns: "Device {device_id} deleted successfully"
         - Status: 200
-    - **Pass:**
+    - **Pass (device doesn't exist):**
         - Returns: ""
         - Status: 204
 
