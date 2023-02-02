@@ -2,7 +2,7 @@ import json
 
 import flask_unittest  # type: ignore
 
-from app import create_app
+from app.app import create_app
 from common.device import Device
 
 

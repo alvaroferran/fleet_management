@@ -66,3 +66,10 @@ Execute the fleet management system:
 and then the test client:
 
     docker compose run --rm test_client
+
+
+## UNIT TEST
+
+The server unit test can be used to verify the API endpoints with an ephemeral database.
+
+    python3 -m unittest app.app_test
