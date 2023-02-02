@@ -1,9 +1,53 @@
 # Fleet management
-API to manage a fleet of distributed devices.
+Flask app with a REST API to manage a fleet of distributed devices.
+
+## REST API
+
+-  **Get list of devices:** &nbsp; `GET /devices/`
+
+   - **Pass:**
+     - Returns: List of found devices.
+     - Status: 200
+   - **Fail:**
+     - Returns: "No devices found"
+     - Status: 404
+
+-  **Get device properties:** &nbsp; `GET /devices/<int:id>`
+    - **Pass:**
+        - Returns: Found device.
+        - Status: 200
+    - **Fail:**
+        - Returns: "Device {device_id} not found"
+        - Status: 404
+
+-  **Create device:** &nbsp; `POST /devices/<int:id>`
+    - **Pass:**
+        - Returns: "Device {device_id} created successfully"
+        - Status: 201
+    - **Pass:**
+        - Returns: ""
+        - Status: 204
+
+-  **Update device:** &nbsp; `PUT /devices/<int:id>`
+    - **Pass:**
+        - Returns: "Device {device_id} updated successfully"
+        - Status: 200
+    - **Fail:**
+        - Returns: "Device {device_id} not found"
+        - Status: 404
+
+-  **Remove device:** &nbsp; `DELETE /devices/<int:id>`
+    - **Pass:**
+        - Returns: "Device {device_id} deleted successfully"
+        - Status: 200
+    - **Pass:**
+        - Returns: ""
+        - Status: 204
 
 
-## Build
-Set the database user and admin passwords. Eg.
+
+## BUILD
+Set the database user and admin passwords, eg.
 
     echo "very_long_but_easy_to_remember_user_password" > app/mongo/secrets/mongo_password.txt
     echo "very_long_but_easy_to_remember_admin_password" > app/mongo/secrets/mongo_root_password.txt
@@ -13,7 +57,7 @@ To build the images run
     docker compose build
 
 
-## Run
+## RUN
 
 Execute the fleet management system:
 
